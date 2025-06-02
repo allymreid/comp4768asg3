@@ -20,7 +20,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/edit/:id',
       builder: (context, state) {
-        final id = int.tryParse(state.params['id'] ?? '');
+        final id = int.tryParse(state.pathParameters['id'] ?? '');
         return AddEditScreen(expenseKey: id);
       },
     ),
