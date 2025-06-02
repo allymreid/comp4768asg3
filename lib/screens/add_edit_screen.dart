@@ -16,6 +16,9 @@ class _AddEditScreenState extends ConsumerState<AddEditScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _amountController = TextEditingController();
+  String _selectedCategory = 'Food'; // default
+  final categories = ['Food', 'Transport', 'Shopping', 'Entertainment', 'Utility', 'Education', 'Other'];
+
   DateTime _selectedDate = DateTime.now();
 
   @override
@@ -24,7 +27,7 @@ class _AddEditScreenState extends ConsumerState<AddEditScreen> {
     if (widget.expenseKey != null) {
       final existing = ref.read(expenseProvider).getExpenseByKey(widget.expenseKey!);
       if (existing != null) {
-        _nameController.text = existing.name;
+        _nameController.text = existing.description;
         _amountController.text = existing.amount.toString();
       }
     }
@@ -36,8 +39,10 @@ class _AddEditScreenState extends ConsumerState<AddEditScreen> {
       final amount = double.parse(_amountController.text.trim());
 
       final newExpense = Expense(
-        name: name,
+        description: name,
         amount: amount,
+        date: _selectedDate,
+        category: _selectedCategory
       );
 
       if (widget.expenseKey != null) {
@@ -93,10 +98,29 @@ class _AddEditScreenState extends ConsumerState<AddEditScreen> {
                 },
               ),
               const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: _pickDate,
-                child: Text('Pick Date: ${_selectedDate.toLocal()}'.split(' ')[0]),
+              DropdownButtonFormField<String>(
+                value: _selectedCategory,
+                items: categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                onChanged: (value) => setState(() => _selectedCategory = value!),
+                decoration: const InputDecoration(labelText: 'Category'),
               ),
+
+              Row(
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: _pickDate,
+                    icon: const Icon(Icons.calendar_today),
+                    label: const Text('Date'),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    '${_selectedDate.toLocal()}'.split(' ')[0],
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+
+
               const Spacer(),
               ElevatedButton(
                 onPressed: _save,
