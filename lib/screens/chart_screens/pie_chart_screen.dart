@@ -41,7 +41,7 @@ Color categoryColor(String category) {
         value: entry.value,
         color: categoryColor(entry.key),
         radius: 60,
-        titleStyle: const TextStyle(fontSize: 18, color: Colors.white),
+        titleStyle: const TextStyle(fontSize: 14, color: Colors.white),
       );
     }).toList();
 

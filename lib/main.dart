@@ -9,13 +9,15 @@ import 'routing/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final appDir = await getApplicationDocumentsDirectory();
-  await Hive.initFlutter(appDir.path);
+  await Hive.initFlutter();
   Hive.registerAdapter(ExpenseAdapter());
-  await Hive.openBox<Expense>('expenses');
+
+  final box = await Hive.openBox<Expense>('expenses');
+  await box.clear(); // ← Clears all saved expense entries
 
   runApp(const ProviderScope(child: MainApp()));
 }
+
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

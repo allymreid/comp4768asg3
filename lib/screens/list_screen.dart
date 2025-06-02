@@ -133,6 +133,13 @@ class ListScreen extends ConsumerWidget {
                               icon: const Icon(Icons.edit, size: 20),
                               onPressed: () => context.go('/edit/$key'),
                             ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, size: 20, color: Colors.red),
+                              onPressed: () async {
+                                await ref.read(expenseProvider.notifier).deleteExpense(key);
+                              },
+                            ),
+
                           ],
                         ),
                       );
